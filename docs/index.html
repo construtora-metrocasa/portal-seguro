@@ -1,42 +1,137 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>Portal</title>
-<link rel="stylesheet" href="style.css">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+<title>🎬 Portal</title>
+<style>
+body{
+  margin:0;
+  font-family: Arial, sans-serif;
+  background:#0f0f0f;
+  color:white;
+}
+
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px 30px;
+  background:#141414;
+  box-shadow:0 2px 5px rgba(0,0,0,.5);
+}
+
+.user{
+  font-size:14px;
+  color:#ccc;
+}
+
+.logout{
+  background:#e50914;
+  border:none;
+  padding:8px 16px;
+  color:white;
+  border-radius:4px;
+  cursor:pointer;
+}
+
+h2{
+  margin:20px 30px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:20px;
+  padding:20px 30px;
+}
+
+.card{
+  background:#1f1f1f;
+  border-radius:12px;
+  padding:20px;
+  transition:.3s;
+  cursor:pointer;
+  box-shadow:0 0 10px rgba(0,0,0,.4);
+}
+
+.card:hover{
+  transform:scale(1.05);
+  background:#2a2a2a;
+}
+
+.card h3{
+  margin:0 0 10px;
+}
+
+.popup{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:#222;
+  padding:12px 18px;
+  border-radius:8px;
+  box-shadow:0 0 10px black;
+  animation:fade 4s forwards;
+}
+
+@keyframes fade{
+  0%{opacity:0;transform:translateY(20px);}
+  10%{opacity:1;}
+  90%{opacity:1;}
+  100%{opacity:0;}
+}
+</style>
 </head>
+
 <body>
 
-<header id="topbar">
-  <div class="logo">🎬 Portal</div>
-  <div class="user-info">
-    <span id="username"></span>
-    <span id="timer"></span>
-    <button onclick="logout()">Sair</button>
-  </div>
+<header>
+  <div>🎬 Portal</div>
+  <div class="user" id="userInfo"></div>
+  <button class="logout" onclick="logout()">Sair</button>
 </header>
 
-<div id="loginBox" class="login-card">
-  <h1>Entrar</h1>
-  <input id="user" placeholder="Usuário">
-  <input id="pass" type="password" placeholder="Senha">
-  <button onclick="login()">Entrar</button>
-</div>
+<h2>Seus Sites</h2>
+<div class="grid" id="cards"></div>
 
-<div id="panel" hidden>
-  <h2 class="title">Seus Sites</h2>
-  <div id="cards"></div>
-</div>
+<script>
+let user = sessionStorage.getItem("user");
+let sessionMinutes = sessionStorage.getItem("sessionMinutes");
+let sites = JSON.parse(sessionStorage.getItem("sites"));
 
-<div id="viewerBox" hidden>
-  <iframe id="viewer"></iframe>
-</div>
+document.getElementById("userInfo").innerText = 
+`👤 ${user} ⏱ ${sessionMinutes} min`;
 
-<div id="loader" hidden>Carregando...</div>
-<div id="toast"></div>
+const cardsDiv = document.getElementById("cards");
 
-<script src="crypto.js"></script>
-<script src="app.js"></script>
+sites.forEach(s=>{
+  const card = document.createElement("div");
+  card.className="card";
+  card.innerHTML = `<h3>${s.site}</h3><p>Clique para acessar</p>`;
+  card.onclick = ()=>openSite(s.token, s.site);
+  cardsDiv.appendChild(card);
+});
+
+function openSite(token, site){
+  google.script.run.logAccess(user, site);
+  window.location.href = "viewer.html?token="+token;
+}
+
+function logout(){
+  sessionStorage.clear();
+  location.href="index.html";
+}
+
+// popup acesso
+showPopup(`${user} acabou de acessar o portal`);
+function showPopup(msg){
+  const div=document.createElement("div");
+  div.className="popup";
+  div.innerText=msg;
+  document.body.appendChild(div);
+  setTimeout(()=>div.remove(),4000);
+}
+</script>
+
 </body>
 </html>
