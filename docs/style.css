@@ -1,0 +1,112 @@
+* {
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(135deg, #1f2933, #111827);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.container {
+  width: 100%;
+  max-width: 1000px;
+}
+
+.card {
+  background: #1f2933;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,.4);
+  text-align: center;
+}
+
+.card h1 {
+  margin-bottom: 10px;
+}
+
+.card p {
+  opacity: 0.7;
+  margin-bottom: 20px;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background: #3b82f6;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: .2s;
+}
+
+button:hover {
+  background: #2563eb;
+}
+
+.dashboard {
+  display: flex;
+  height: 80vh;
+  background: #1f2933;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0,0,0,.4);
+}
+
+aside {
+  width: 220px;
+  background: #111827;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+aside h2 {
+  margin-bottom: 15px;
+}
+
+#sites button {
+  margin-bottom: 10px;
+  background: #374151;
+}
+
+#sites button:hover {
+  background: #4b5563;
+}
+
+.logout {
+  margin-top: auto;
+  background: #ef4444;
+}
+
+.logout:hover {
+  background: #dc2626;
+}
+
+main {
+  flex: 1;
+  background: #000;
+}
+
+iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
