@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Portal</title>
+<style>
+body{
+  margin:0;
+  background:#0f0f0f;
+  color:white;
+  font-family:Arial;
+}
+
+header{
+  display:flex;
+  justify-content:space-between;
+  padding:15px 30px;
+  background:#141414;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  gap:20px;
+  padding:20px 30px;
+}
+
+.card{
+  background:#1f1f1f;
+  padding:20px;
+  border-radius:12px;
+  cursor:pointer;
+  transition:.3s;
+}
+
+.card:hover{
+  transform:scale(1.05);
+  background:#2a2a2a;
+}
+
+.popup{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:#222;
+  padding:12px 18px;
+  border-radius:8px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div>🎬 Portal</div>
+  <div id="userInfo"></div>
+  <button onclick="logout()">Sair</button>
+</header>
+
+<div class="grid" id="cards"></div>
+
+<script>
+let user=sessionStorage.getItem("user");
+let sessionMinutes=sessionStorage.getItem("sessionMinutes");
+let sites=JSON.parse(sessionStorage.getItem("sites"));
+
+document.getElementById("userInfo").innerText=`👤 ${user} ⏱ ${sessionMinutes} min`;
+
+const grid=document.getElementById("cards");
+
+sites.forEach(s=>{
+  const div=document.createElement("div");
+  div.className="card";
+  div.innerHTML=`<h3>${s.site}</h3>`;
+  div.onclick=()=>openSite(s.token,s.site);
+  grid.appendChild(div);
+});
+
+function openSite(token,site){
+  google.script.run.logAccess(user,site);
+  location.href="viewer.html?token="+token;
+}
+
+function logout(){
+  sessionStorage.clear();
+  location.href="index.html";
+}
+
+let lastUser="";
+setInterval(()=>{
+  google.script.run.withSuccessHandler(data=>{
+    if(!data) return;
+    if(data.user!=lastUser){
+      lastUser=data.user;
+      showPopup(`${data.user} acabou de acessar ${data.site}`);
+    }
+  }).getLastAccess();
+},5000);
+
+function showPopup(msg){
+  const div=document.createElement("div");
+  div.className="popup";
+  div.innerText=msg;
+  document.body.appendChild(div);
+  setTimeout(()=>div.remove(),4000);
+}
+</script>
+
+</body>
+</html>
