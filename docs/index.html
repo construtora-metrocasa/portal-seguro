@@ -1,26 +1,38 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
+<meta charset="UTF-8">
 <title>Portal Seguro</title>
 <link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<div id="loginBox">
-  <h2>Login</h2>
-  <input id="user" placeholder="Usuário"><br>
-  <input id="pass" type="password" placeholder="Senha"><br>
-  <button onclick="login()">Entrar</button>
-</div>
+<div class="container">
 
-<div id="panel" hidden>
-  <h2>Sites</h2>
-  <div id="sites"></div>
-  <iframe id="viewer"></iframe>
+  <div id="loginBox" class="card">
+    <h1>🔐 Portal Seguro</h1>
+    <p>Entre para acessar seus sites</p>
+    <input id="user" placeholder="Usuário">
+    <input id="pass" type="password" placeholder="Senha">
+    <button onclick="login()">Entrar</button>
+  </div>
+
+  <div id="panel" class="dashboard" hidden>
+    <aside>
+      <h2>Sites</h2>
+      <div id="sites"></div>
+      <button class="logout" onclick="logout()">Sair</button>
+    </aside>
+
+    <main>
+      <iframe id="viewer"></iframe>
+    </main>
+  </div>
+
 </div>
 
 <script src="crypto.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
-
