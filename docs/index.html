@@ -14,24 +14,19 @@ body{
   font-family:Arial;
 }
 .box{
-  background:#1f1f1f;
-  padding:30px;
-  border-radius:12px;
-  width:300px;
-  text-align:center;
+  background:#141414;
+  padding:40px;
+  border-radius:16px;
+  width:320px;
 }
 input,button{
   width:100%;
-  padding:10px;
-  margin-top:10px;
+  padding:12px;
+  margin-top:12px;
+  border-radius:8px;
   border:none;
-  border-radius:6px;
 }
-button{
-  background:#e50914;
-  color:white;
-  cursor:pointer;
-}
+button{background:#e50914;color:white;}
 </style>
 </head>
 
@@ -45,14 +40,26 @@ button{
 </div>
 
 <script>
+const API="https://script.google.com/macros/s/SEU_ID/exec";
+
 async function login(){
-  const user=document.getElementById("user").value;
-  const pass=document.getElementById("pass").value;
+  const user=userInput.value;
+  const pass=passInput.value;
   const hash=await sha256(pass);
 
-  google.script.run.withSuccessHandler(res=>{
+  msg.innerText="⏳ Autenticando...";
+
+  fetch(API,{
+    method:"POST",
+    body:JSON.stringify({
+      action:"login",
+      payload:{user,pass_hash:hash}
+    })
+  })
+  .then(r=>r.json())
+  .then(res=>{
     if(res.error){
-      document.getElementById("msg").innerText="Login inválido";
+      msg.innerText="❌ Login inválido";
       return;
     }
 
@@ -61,7 +68,7 @@ async function login(){
     sessionStorage.setItem("sessionMinutes",res.sessionMinutes);
 
     location.href="portal.html";
-  }).loginUser({user:user, pass_hash:hash});
+  });
 }
 
 async function sha256(text){
